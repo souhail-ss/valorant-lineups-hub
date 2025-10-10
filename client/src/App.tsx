@@ -74,18 +74,20 @@ const mockLineups: Lineup[] = [
 const Header: React.FC = () => {
   return (
     <header style={{
-      padding: '30px 0',
-      borderBottom: '1px solid rgba(255,255,255,0.1)',
+      padding: '30px 50px',
+      boxShadow: '0 4px 30px rgba(255, 255, 255, 0.049)',
+      borderRadius: '0 0 20px 20px',
       backdropFilter: 'blur(10px)',
       position: 'sticky',
       top: 0,
       zIndex: 100,
-      background: 'rgba(15, 25, 35, 0.8)'
+      background: 'rgba(15, 25, 35, 0.8)',
+      
     }}>
       <nav style={{
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
       }}>
         <div style={{
           fontSize: '28px',
@@ -94,7 +96,7 @@ const Header: React.FC = () => {
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           textTransform: 'uppercase',
-          letterSpacing: '2px'
+          letterSpacing: '3px',
         }}>
           ⚡ LINEUPS.GG
         </div>
