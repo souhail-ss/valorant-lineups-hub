@@ -1,4 +1,4 @@
-import 'reflect-metadata'; 
+import 'reflect-metadata';  // ← ADD THIS LINE AT THE TOP
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
@@ -8,7 +8,7 @@ async function bootstrap() {
   
   // Enable CORS for frontend
   app.enableCors({
-    origin: 'http://localhost:5173', // React dev server
+    origin: 'http://localhost:5173',
     credentials: true,
   });
   
