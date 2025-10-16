@@ -20,7 +20,7 @@ export const Input: React.FC<InputProps> = ({
   required = false,
 }) => {
   return (
-    <div style={{ width: '100%' }}>
+    <div style={{ width: '100%', marginBottom: '20px' }}>
       {label && (
         <label
           style={{
