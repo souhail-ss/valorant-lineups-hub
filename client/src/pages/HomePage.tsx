@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Header } from '../components/organisms/Header';
 
 // Types
 interface Lineup {
@@ -70,70 +71,7 @@ const mockLineups: Lineup[] = [
   }
 ];
 
-// Header Component
-const Header: React.FC = () => {
-  return (
-    <header style={{
-      padding: '30px 50px',
-      boxShadow: '0 4px 30px rgba(255, 255, 255, 0.049)',
-      borderRadius: '0 0 20px 20px',
-      backdropFilter: 'blur(10px)',
-      position: 'sticky',
-      top: 0,
-      zIndex: 100,
-      background: 'rgba(15, 25, 35, 0.8)',
-      
-    }}>
-      <nav style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-      }}>
-        <div style={{
-          fontSize: '28px',
-          fontWeight: 700,
-          background: 'linear-gradient(135deg, #ff4655 0%, #ff8a80 100%)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          textTransform: 'uppercase',
-          letterSpacing: '3px',
-        }}>
-          ⚡ LINEUPS.GG
-        </div>
-        <ul style={{
-          display: 'flex',
-          gap: '40px',
-          listStyle: 'none',
-          margin: 0,
-          padding: 0
-        }}>
-          {['Home', 'Browse', 'Agents', 'Maps', 'Submit'].map((item) => (
-            <li key={item}>
-              <a
-                href={`#${item.toLowerCase()}`}
-                style={{
-                  color: '#ece8e1',
-                  textDecoration: 'none',
-                  fontWeight: 500,
-                  position: 'relative',
-                  transition: 'color 0.3s'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = '#ff4655';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = '#ece8e1';
-                }}
-              >
-                {item}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </header>
-  );
-};
+
 
 // Hero Component
 const Hero: React.FC = () => {

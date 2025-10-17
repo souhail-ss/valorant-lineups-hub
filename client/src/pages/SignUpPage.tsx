@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SignUpForm } from '../components/organisms/SignUpForm';
 import { AuthResponse } from '../types/auth.types';
+import { useAuth } from '../contexts/AuthContext';
 
 const DesignSide: React.FC = () => {
   return (
@@ -104,13 +105,12 @@ const DesignSide: React.FC = () => {
 
 export const SignUpPage: React.FC = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSuccess = (response: AuthResponse) => {
-    console.log('Sign up success:', response);
-    alert(`Welcome ${response.user.username}!`);
+    login(response.user, response.access_token);
     navigate('/');
   };
-
   return (
     <div style={{
       minHeight: '100vh',
