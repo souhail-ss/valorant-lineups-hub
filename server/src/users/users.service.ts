@@ -1,46 +1,69 @@
 import { Injectable, ConflictException } from '@nestjs/common';
-import { User } from './entities/user.entity';
+import { PrismaService } from '../pirsma/prisma.service';
+import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  // Temporary in-memory storage (will be replaced with database)
-  private users: User[] = [];
+  constructor(private prisma: PrismaService) {}
 
   async create(username: string, email: string, password: string): Promise<User> {
     // Check if user already exists
-    const existingUser = this.users.find(u => u.email === email);
+    const existingUser = await this.prisma.user.findFirst({
+      where: {
+        OR: [
+          { email },
+          { username }
+        ]
+      }
+    });
+
     if (existingUser) {
-      throw new ConflictException('User with this email already exists');
+      if (existingUser.email === email) {
+        throw new ConflictException('User with this email already exists');
+      }
+      if (existingUser.username === username) {
+        throw new ConflictException('Username is already taken');
+      }
     }
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new user
-    const newUser: User = {
-      id: Date.now().toString(), // Simple ID generation
-      username,
-      email,
-      password: hashedPassword,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    // Create user
+    const user = await this.prisma.user.create({
+      data: {
+        username,
+        email,
+        password: hashedPassword,
+      },
+    });
 
-    this.users.push(newUser);
-    return newUser;
+    return user;
   }
 
-  async findByEmail(email: string): Promise<User | undefined> {
-    return this.users.find(u => u.email === email);
+  async findByEmail(email: string): Promise<User | null> {
+    return this.prisma.user.findUnique({
+      where: { email },
+    });
   }
 
-  async findById(id: string): Promise<User | undefined> {
-    return this.users.find(u => u.id === id);
+  async findById(id: string): Promise<User | null> {
+    return this.prisma.user.findUnique({
+      where: { id },
+    });
   }
 
-  // For testing - remove in production
   async findAll(): Promise<User[]> {
-    return this.users;
+    return this.prisma.user.findMany({
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        createdAt: true,
+        updatedAt: true,
+        password: false,
+      },
+    });
   }
 }

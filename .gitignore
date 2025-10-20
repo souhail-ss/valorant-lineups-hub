@@ -95,6 +95,17 @@ dist
 .temp
 .cache
 
+## **Step 8: Add to .gitignore**
+
+**Edit file:** `server/.gitignore`
+
+Add these lines:
+```
+# Database
+prisma/dev.db
+prisma/dev.db-journal
+prisma/migrations
+
 # Sveltekit cache directory
 .svelte-kit/
 
