@@ -54,7 +54,7 @@ export class UsersService {
     });
   }
 
-  async findAll(): Promise<User[]> {
+async findAll(): Promise<Omit<User, 'password'>[]> {
     return this.prisma.user.findMany({
       select: {
         id: true,

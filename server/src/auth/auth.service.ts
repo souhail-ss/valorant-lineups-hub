@@ -13,24 +13,32 @@ export class AuthService {
   ) {}
 
   async signUp(signUpDto: SignUpDto) {
-    const { username, email, password } = signUpDto;
+    console.log('SignUp attempt:', signUpDto);
 
-    // Create user
-    const user = await this.usersService.create(username, email, password);
+    try {
+      const { username, email, password } = signUpDto;
 
-    // Generate JWT token
-    const payload = { email: user.email, sub: user.id };
-    const access_token = this.jwtService.sign(payload);
+      // Create user
+      const user = await this.usersService.create(username, email, password);
+      console.log('User created:', { id: user.id, username: user.username, email: user.email });
 
-    return {
-      message: 'User created successfully',
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-      },
-      access_token,
-    };
+      // Generate JWT token
+      const payload = { email: user.email, sub: user.id };
+      const access_token = this.jwtService.sign(payload);
+
+      return {
+        message: 'User created successfully',
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+        },
+        access_token,
+      };
+    } catch (error) {
+      console.error('SignUp error in service:', error);
+      throw error;
+    }
   }
 
   async signIn(signInDto: SignInDto) {

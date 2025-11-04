@@ -21,12 +21,59 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSuccess }) => {
     setIsLoading(true);
     setErrors({});
 
+    // Basic validation
+    if (!formData.username) {
+      setErrors({ username: 'Username is required' });
+      setIsLoading(false);
+      return;
+    }
+
+    if (!formData.email) {
+      setErrors({ email: 'Email is required' });
+      setIsLoading(false);
+      return;
+    }
+
+    if (!formData.password || formData.password.length < 6) {
+      setErrors({ password: 'Password must be at least 6 characters' });
+      setIsLoading(false);
+      return;
+    }
+
     try {
+      console.log('Attempting signup with:', {
+        username: formData.username,
+        email: formData.email,
+        password: '***hidden***'
+      });
+
       const response = await authService.signUp(formData);
+      
+      console.log('Signup successful:', response);
       onSuccess(response);
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Sign up failed';
-      setErrors({ general: Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage });
+      console.error('Signup error:', error);
+      
+      // Handle different error types
+      if (error.response) {
+        // Server responded with error
+        console.error('Server error:', error.response.data);
+        const errorMessage = error.response.data.message;
+        
+        if (Array.isArray(errorMessage)) {
+          setErrors({ general: errorMessage.join(', ') });
+        } else {
+          setErrors({ general: errorMessage || 'Sign up failed' });
+        }
+      } else if (error.request) {
+        // Request made but no response
+        console.error('No response from server:', error.request);
+        setErrors({ general: 'Cannot connect to server. Make sure backend is running on http://localhost:3000' });
+      } else {
+        // Something else happened
+        console.error('Error:', error.message);
+        setErrors({ general: error.message || 'Sign up failed' });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -73,6 +120,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSuccess }) => {
           color: '#ff4655',
           fontSize: '14px',
           marginBottom: '20px',
+          whiteSpace: 'pre-wrap',
         }}>
           {errors.general}
         </div>
